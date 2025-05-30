@@ -55,6 +55,7 @@ NEWLINE		[\n]
 WHITESPACE	[ \t]
 TRUE		t[rR][uU][eE]
 FALSE		f[aA][lL][sS][eE]
+INTEGER		{DIGIT}+
 
 %%
 
@@ -79,31 +80,50 @@ FALSE		f[aA][lL][sS][eE]
   */
 
 {DARROW}		{ return (DARROW);	}
-{TRUE}			{ cool_yylval.boolean = 1;return (BOOL_CONST);  }
-{FALSE}			{ cool_yylval.boolean = 0;return (BOOL_CONST);  }
-"class"			{ return(CLASS);	}
-"else"			{ return(ELSE);		}
-"fi"			{ return(FI); 		}
-"if"			{ return(IF); 		}
-"in"			{ return(IN); 		}
-"inherits"		{ return(INHERITS); 	}
-"let"			{ return(LET); 		}
-"loop"			{ return(LOOP); 	}
-"pool"			{ return(POOL); 	}
-"then"			{ return(THEN); 	}
-"while"			{ return(WHILE); 	}
-"case"			{ return(CASE); 	}
-"esac"			{ return(ESAC); 	}
-"of"			{ return(OF); 		}
-"new" 			{ return(NEW); 		}
+{TRUE}			{ cool_yylval.boolean = 1; return (BOOL_CONST);  }
+{FALSE}			{ cool_yylval.boolean = 0; return (BOOL_CONST);  }
+{INTEGER}		{ cool_yylval.symbol = inttable.add_string(yytext); return (INT_CONST);	}
 
+(?i:class)		{ return(CLASS);	}
+(?i:else)		{ return(ELSE);		}
+(?i:fi)			{ return(FI); 		}
+(?i:if)			{ return(IF); 		}
+(?i:in)			{ return(IN); 		}
+(?i:inherits)		{ return(INHERITS); 	}
+(?i:let)		{ return(LET); 		}
+(?i:loop)		{ return(LOOP); 	}
+(?i:pool)		{ return(POOL); 	}
+(?i:then)		{ return(THEN); 	}
+(?i:while)		{ return(WHILE); 	}
+(?i:case)		{ return(CASE); 	}
+(?i:esac)		{ return(ESAC); 	}
+(?i:of)			{ return(OF); 		}
+(?i:new)		{ return(NEW); 		}
+"("			{ return('(');		}
+")"			{ return ')'; 		}
+"@"			{ return '@'; 		}
+"~"			{ return '~'; 		}
+","			{ return ','; 		}
+";"			{ return ';'; 		}
+":"			{ return ':'; 		}
+"+"			{ return '+'; 		}
+"-"			{ return '-'; 		}
+"*"			{ return '*'; 		}
+"/"			{ return '/'; 		}
+"%"			{ return '%'; 		}
+"."			{ return '.'; 		}
+"<"			{ return '<'; 		}
+"="			{ return '='; 		}
+"{"			{ return '{'; 		}
+"}"			{ return '}'; 		}
 
 {WHITESPACE}+
 {NEWLINE}		{ ++curr_lineno;	}
-.			{ 
-				cool_yylval.error_msg = "TODO";
-				return(ERROR);	
-			}
+
+.
+
+
+
 
  /*
   * Keywords are case-insensitive except for the values true and false,
